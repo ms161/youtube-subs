@@ -30,6 +30,7 @@ app.get('/subscribers', async (req, res) => {
         const subscribers = await Subscriber.find();
         res.json(subscribers);
     } catch (error) {
+        console.log(error)
         res.status(500).json({ message: error.message });
     }
 })
@@ -49,6 +50,7 @@ app.get('/subscribers/names', async (req, res) => {
         const subscriberNames =await Subscriber.find().select('name subscribedChannel -_id');
         res.json(subscriberNames);
     } catch (error) {
+         console.log(error)
         res.status(500).json({ message: error.message });
     }
 })
