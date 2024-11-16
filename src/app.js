@@ -27,6 +27,7 @@ app.get('/', (req, res) => {
 // GET All Subscribers
 app.get('/subscribers', async (req, res) => {
     try {
+        return res.json({})
         const subscribers = await Subscriber.find();
         res.json(subscribers);
     } catch (error) {
