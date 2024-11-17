@@ -5,7 +5,24 @@ const app = express()
 const Subscriber = require('./models/subscribers')
 const yaml = require('yamljs');
 const swaggerUi = require('swagger-ui-express');
+const mongoose = require('mongoose');
+require('dotenv').config();
+const path = require('path')
 
+// Parse JSON bodies (as sent by API clients)
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }));
+
+
+
+const DATABASE_URL =  process.env.MONGO_URI;
+const PORT = 3000;
+mongoose.connect(process.env.MONGO_URI);
+
+// Connect to DATABASE
+const db = mongoose.connection;
+db.on('error', (err) => console.error(err));
+db.once('open', () => console.log('Connected to database'));
 // Your code goes here
 
 app.use(express.static(path.join(__dirname, 'public')))
@@ -27,7 +44,6 @@ app.get('/', (req, res) => {
 // GET All Subscribers
 app.get('/subscribers', async (req, res) => {
     try {
-        return res.json({})
         const subscribers = await Subscriber.find();
         res.json(subscribers);
     } catch (error) {
@@ -51,7 +67,6 @@ app.get('/subscribers/names', async (req, res) => {
         const subscriberNames =await Subscriber.find().select('name subscribedChannel -_id');
         res.json(subscriberNames);
     } catch (error) {
-         console.log(error)
         res.status(500).json({ message: error.message });
     }
 })
